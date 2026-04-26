@@ -209,7 +209,7 @@ export default function TransactionsPage() {
                             removeTransaction(t.id);
                           }
                         }}
-                        className="opacity-0 group-hover:opacity-100 w-7 h-7 rounded-lg flex items-center justify-center transition-all"
+                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 w-7 h-7 rounded-lg flex items-center justify-center transition-all"
                         style={{ color: 'var(--accent-rose)', background: 'rgba(244,63,94,0.1)' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(244,63,94,0.22)'}
                         onMouseLeave={e => e.currentTarget.style.background = 'rgba(244,63,94,0.1)'}

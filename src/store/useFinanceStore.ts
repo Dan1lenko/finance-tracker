@@ -51,6 +51,7 @@ interface FinanceState {
     expensesByCategory: Record<string, Record<string, number>>;
   };
   _fetchTransactions: () => Promise<void>;
+  _fetchFamilies: () => Promise<void>;
 }
 
 // Mock User removed, strictly defined in actions now
@@ -394,6 +395,22 @@ export const useFinanceStore = create<FinanceState>()(
           });
         } catch (e) {
           console.error("Error fetching transactions:", e);
+        }
+      },
+
+      _fetchFamilies: async () => {
+        const state = get();
+        const user = state.currentUser;
+        if (!user) return;
+
+        try {
+          const res = await fetch(`/api/families?userId=${user.id}`);
+          if (res.ok) {
+            const families = await res.json();
+            set({ families });
+          }
+        } catch (e) {
+          console.error("Error fetching families:", e);
         }
       }
     }),

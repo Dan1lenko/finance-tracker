@@ -31,3 +31,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Помилка створення групи" }, { status: 500 });
   }
 }
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
+
+  if (!userId) {
+    return NextResponse.json({ error: "Необхідно вказати userId" }, { status: 400 });
+  }
+
+  try {
+    const families = await prisma.family.findMany({
+      where: {
+        members: {
+          some: { id: userId }
+        }
+      },
+      include: {
+        members: true
+      }
+    });
+
+    return NextResponse.json(families);
+  } catch (error) {
+    console.error("Fetch families error:", error);
+    return NextResponse.json({ error: "Помилка отримання груп" }, { status: 500 });
+  }
+}
