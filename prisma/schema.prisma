@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String   @default("$2a$10$NotRealHashJustPlaceholder") // Will be hashed in real app, using placeholder for existing rows
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  families     Family[]      @relation("FamilyMembers")
+  ownedFamilies Family[]     @relation("FamilyOwner")
+  transactions Transaction[]
+}
+
+model Family {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members      User[]        @relation("FamilyMembers")
+  
+  ownerId      String?
+  owner        User?         @relation("FamilyOwner", fields: [ownerId], references: [id])
+  
+  transactions Transaction[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  amount      Float
+  currency    String   @default("UAH")
+  type        TransactionType
+  category    String
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  familyId String?
+  family   Family? @relation(fields: [familyId], references: [id])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
