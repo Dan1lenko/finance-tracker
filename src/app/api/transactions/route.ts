@@ -56,3 +56,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Помилка створення транзакції" }, { status: 500 });
   }
 }
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.json({ error: "Необхідно вказати id транзакції" }, { status: 400 });
+  }
+
+  try {
+    await prisma.transaction.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Delete transaction error:", error);
+    return NextResponse.json({ error: "Помилка видалення транзакції" }, { status: 500 });
+  }
+}

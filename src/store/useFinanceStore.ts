@@ -42,7 +42,7 @@ interface FinanceState {
   deleteFamily: (familyId: string) => Promise<void>;
   renameFamily: (familyId: string, name: string) => Promise<void>;
   addTransaction: (transaction: Transaction) => Promise<void>;
-  removeTransaction: (id: string) => void;
+  removeTransaction: (id: string) => Promise<void>;
   createFamily: (name: string) => Promise<void>;
   setActiveContext: (context: ContextType, familyId?: string) => void;
   // Helper
@@ -298,16 +298,31 @@ export const useFinanceStore = create<FinanceState>()(
         }
       },
 
-      removeTransaction: (id) => set((state) => {
-        // Optimistic
-        const newTransactions = state.transactions.filter((t) => t.id !== id);
-        const derived = state._recalculate({ ...state, transactions: newTransactions } as any);
-        // Note: API call to delete would go here
-        return {
-          transactions: newTransactions,
-          ...derived
-        };
-      }),
+      removeTransaction: async (id) => {
+        // 1. Optimistic — remove from UI immediately
+        set((state) => {
+          const newTransactions = state.transactions.filter((t) => t.id !== id);
+          const derived = state._recalculate({ ...state, transactions: newTransactions } as any);
+          return { transactions: newTransactions, ...derived };
+        });
+
+        // 2. Delete from database
+        try {
+          const res = await fetch(`/api/transactions?id=${id}`, { method: 'DELETE' });
+          if (!res.ok) {
+            const err = await res.json();
+            toast.error(err.error || "Помилка видалення");
+            // Revert — re-fetch to restore correct state
+            get()._fetchTransactions();
+          } else {
+            toast.success("Транзакцію видалено");
+          }
+        } catch (e) {
+          console.error(e);
+          toast.error("Помилка з'єднання");
+          get()._fetchTransactions();
+        }
+      },
 
       createFamily: async (name) => {
         const state = get();
