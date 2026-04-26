@@ -230,6 +230,18 @@ export default function Dashboard() {
                 const transactionFamily = t.familyId ? families.find(f => f.id === t.familyId) : null;
                 const currency = (t as any).currency || "UAH";
                 const symbol = getCurrencySymbol(currency);
+
+                // Member who made this transaction (only relevant in FAMILY context)
+                const member = activeContext === 'FAMILY' && currentFamily
+                  ? (currentFamily.members ?? []).find(m => m.id === t.userId)
+                  : null;
+                const memberInitial = member
+                  ? (member.name?.[0] || member.email[0]).toUpperCase()
+                  : null;
+                const memberName = member
+                  ? (member.name || member.email)
+                  : null;
+                const isMe = member?.id === currentUser?.id;
                 
                 return (
                   <li key={t.id} className="flex justify-between items-center py-2.5 px-3 rounded-lg transition-colors" 
@@ -237,18 +249,36 @@ export default function Dashboard() {
                       onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{t.category}</p>
-                        {transactionFamily && activeContext === 'PERSONAL' && (
-                          <span className="badge badge-violet">
-                            {transactionFamily.name}
-                          </span>
+                    {/* Left side */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      {/* Member avatar (family context only) */}
+                      {memberInitial && (
+                        <div
+                          title={memberName ?? ''}
+                          className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
+                          style={{ background: isMe ? 'var(--gradient-brand)' : 'rgba(6,182,212,0.3)' }}
+                        >
+                          {memberInitial}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{t.category}</p>
+                          {transactionFamily && activeContext === 'PERSONAL' && (
+                            <span className="badge badge-violet">{transactionFamily.name}</span>
+                          )}
+                        </div>
+                        {memberName && (
+                          <p className="text-xs mt-0.5" style={{ color: isMe ? 'var(--accent-violet)' : 'var(--accent-cyan)', opacity: 0.85 }}>
+                            {isMe ? 'Ви' : memberName}
+                          </p>
                         )}
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                          {new Date(t.date).toLocaleDateString()}
+                        </p>
                       </div>
-                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{new Date(t.date).toLocaleDateString()}</p>
                     </div>
-                    <span className="font-semibold text-sm"
+                    <span className="font-semibold text-sm flex-shrink-0 ml-3"
                           style={{ color: t.type === 'INCOME' ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                       {t.type === 'INCOME' ? '+' : '-'}{t.amount.toFixed(2)} {symbol}
                     </span>

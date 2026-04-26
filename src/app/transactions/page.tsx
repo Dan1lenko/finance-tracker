@@ -129,6 +129,19 @@ export default function TransactionsPage() {
                 const currency = (t as any).currency || "UAH";
                 const symbol = getCurrencySymbol(currency);
 
+                // Family member who created this tx
+                const activeFamilyObj = activeContext === 'FAMILY'
+                  ? families.find(f => f.id === activeFamilyId)
+                  : null;
+                const member = activeFamilyObj
+                  ? (activeFamilyObj.members ?? []).find(m => m.id === t.userId)
+                  : null;
+                const memberInitial = member
+                  ? (member.name?.[0] || member.email[0]).toUpperCase()
+                  : null;
+                const memberName = member ? (member.name || member.email) : null;
+                const isMe = member?.id === currentUser?.id;
+
                 return (
                   <li
                     key={t.id}
@@ -138,25 +151,41 @@ export default function TransactionsPage() {
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
                     {/* Left: icon + info */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 min-w-0">
                       <div
                         className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{
-                          background: t.type === 'INCOME' ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)',
-                        }}
+                        style={{ background: t.type === 'INCOME' ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)' }}
                       >
                         {t.type === 'INCOME'
                           ? <ArrowUpCircle className="w-4 h-4" style={{ color: 'var(--accent-emerald)' }} />
                           : <ArrowDownCircle className="w-4 h-4" style={{ color: 'var(--accent-rose)' }} />
                         }
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
+
+                      {/* Member avatar in family context */}
+                      {memberInitial && (
+                        <div
+                          title={memberName ?? ''}
+                          className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                          style={{ background: isMe ? 'var(--gradient-brand)' : 'rgba(6,182,212,0.3)' }}
+                        >
+                          {memberInitial}
+                        </div>
+                      )}
+
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{t.category}</p>
                           {transactionFamily && activeContext === 'PERSONAL' && (
                             <span className="badge badge-violet">{transactionFamily.name}</span>
                           )}
                         </div>
+                        {/* Member name row */}
+                        {memberName && (
+                          <p className="text-xs mt-0.5 font-medium" style={{ color: isMe ? 'var(--accent-violet)' : 'var(--accent-cyan)' }}>
+                            {isMe ? 'Ви' : memberName}
+                          </p>
+                        )}
                         {t.description && (
                           <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>{t.description}</p>
                         )}
@@ -167,7 +196,7 @@ export default function TransactionsPage() {
                     </div>
 
                     {/* Right: amount + delete */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-shrink-0 ml-3">
                       <span
                         className="font-bold text-base"
                         style={{ color: t.type === 'INCOME' ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}
