@@ -226,7 +226,11 @@ export default function Dashboard() {
             {filteredTransactions.length === 0 ? (
               <p className="text-sm py-4 text-center" style={{ color: 'var(--text-muted)' }}>Транзакцій ще немає.</p>
             ) : (
-              filteredTransactions.slice(-5).reverse().map((t) => {
+              filteredTransactions
+                .slice()
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .slice(0, 5)
+                .map((t) => {
                 const transactionFamily = t.familyId ? families.find(f => f.id === t.familyId) : null;
                 const currency = (t as any).currency || "UAH";
                 const symbol = getCurrencySymbol(currency);
