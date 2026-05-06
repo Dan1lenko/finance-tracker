@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFinanceStore } from "@/store/useFinanceStore";
-import { ArrowUpCircle, ArrowDownCircle, Wallet, Clock, PieChart, ChevronRight } from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle, Wallet, Clock, PieChart, ChevronRight, Plus } from "lucide-react";
+import MemberSearchModal from "./MemberSearchModal";
 
 /**
  * Демонстрація Декларативної Парадигми
@@ -57,6 +58,7 @@ export default function Dashboard() {
   if (currencies.length === 0) currencies.push("UAH");
 
   const [mounted, setMounted] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -89,7 +91,18 @@ export default function Dashboard() {
            <div className="flex justify-between items-center mb-3">
              <h4 className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Учасники групи</h4>
              {currentUser?.id === currentFamily.ownerId && (
-                <div className="flex gap-2"></div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setIsSearchOpen(true)}
+                    className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg transition-all"
+                    style={{ color: 'var(--accent-violet)', background: 'rgba(139,92,246,0.1)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(139,92,246,0.2)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(139,92,246,0.1)')}
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Додати учасника
+                  </button>
+                </div>
              )}
            </div>
            
@@ -347,6 +360,14 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {activeContext === 'FAMILY' && activeFamilyId && (
+        <MemberSearchModal 
+          isOpen={isSearchOpen} 
+          onClose={() => setIsSearchOpen(false)} 
+          familyId={activeFamilyId} 
+        />
+      )}
     </div>
   );
 }

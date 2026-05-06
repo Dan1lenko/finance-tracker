@@ -116,23 +116,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Stats grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[
-            { icon: TrendingUp,   label: "Доходи",      value: `+${totalIncome.toFixed(0)} ₴`,  color: "var(--accent-emerald)" },
-            { icon: TrendingDown, label: "Витрати",     value: `-${totalExpense.toFixed(0)} ₴`, color: "var(--accent-rose)" },
-            { icon: Wallet,       label: "Транзакцій",  value: totalTx,                          color: "var(--accent-violet)" },
-            { icon: Users,        label: "Груп",        value: families.length,                  color: "var(--accent-cyan)" },
-          ].map(({ icon: Icon, label, value, color }) => (
-            <div key={label} className="glass-card p-4 flex flex-col items-center text-center gap-2">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${color}1a` }}>
-                <Icon className="w-4 h-4" style={{ color }} />
-              </div>
-              <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{value}</p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{label}</p>
-            </div>
-          ))}
-        </div>
+
 
         {/* Balances */}
         {Object.keys(balances).length > 0 && (

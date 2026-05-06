@@ -30,8 +30,7 @@ export default function TransactionsPage() {
       t.category.toLowerCase().includes(search.toLowerCase()) ||
       (t.description || "").toLowerCase().includes(search.toLowerCase())
     )
-    .slice()
-    .reverse();
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const totalIncome = filtered.filter(t => t.type === "INCOME").reduce((s, t) => s + t.amount, 0);
   const totalExpense = filtered.filter(t => t.type === "EXPENSE").reduce((s, t) => s + t.amount, 0);

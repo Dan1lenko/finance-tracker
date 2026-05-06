@@ -5,7 +5,6 @@ import { User, Users, Plus, LayoutDashboard, LogOut, LogIn, Sparkles, X, Wallet 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import MemberSearchModal from "./MemberSearchModal";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -30,7 +29,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [newFamilyName, setNewFamilyName] = useState("");
 
   const handleCreateFamily = (e: React.FormEvent) => {
@@ -161,18 +159,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <Users className="w-4 h-4" />
                   {family.name}
                 </button>
-                {activeContext === 'FAMILY' && activeFamilyId === family.id && currentUser.id === family.ownerId && (
-                  <button
-                    onClick={() => setIsSearchOpen(true)}
-                    className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-all rounded-md p-0.5"
-                    style={{ color: 'var(--text-muted)' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent-violet)'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
-                    title="Додати учасника"
-                  >
-                    <Plus className="w-3 h-3" />
-                  </button>
-                )}
               </div>
             ))
           )}
@@ -242,15 +228,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
       </div>
-
-
-      {activeContext === 'FAMILY' && activeFamilyId && (
-        <MemberSearchModal 
-          isOpen={isSearchOpen} 
-          onClose={() => setIsSearchOpen(false)} 
-          familyId={activeFamilyId} 
-        />
-      )}
     </aside>
   );
 }

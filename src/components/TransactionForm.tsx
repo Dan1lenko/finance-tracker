@@ -118,12 +118,10 @@ export default function TransactionForm() {
                  onMouseEnter={e => {
                    e.currentTarget.style.background = 'rgba(244,63,94,0.22)';
                    e.currentTarget.style.borderColor = 'rgba(244,63,94,0.6)';
-                   e.currentTarget.style.transform = 'scale(1.08)';
                  }}
                  onMouseLeave={e => {
                    e.currentTarget.style.background = 'rgba(244,63,94,0.08)';
                    e.currentTarget.style.borderColor = 'rgba(244,63,94,0.35)';
-                   e.currentTarget.style.transform = 'scale(1)';
                  }}
                >
                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
@@ -183,12 +181,10 @@ export default function TransactionForm() {
                  onMouseEnter={e => {
                    e.currentTarget.style.background = 'rgba(16,185,129,0.22)';
                    e.currentTarget.style.borderColor = 'rgba(16,185,129,0.6)';
-                   e.currentTarget.style.transform = 'scale(1.08)';
                  }}
                  onMouseLeave={e => {
                    e.currentTarget.style.background = 'rgba(16,185,129,0.08)';
                    e.currentTarget.style.borderColor = 'rgba(16,185,129,0.35)';
-                   e.currentTarget.style.transform = 'scale(1)';
                  }}
                >
                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
