@@ -197,7 +197,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       </div>
 
       {/* User section */}
-      <div className="p-4" style={{ borderTop: '1px solid var(--border-glass)' }}>
+      <div className="p-4" style={{ borderTop: '1px solid var(--border-glass)', paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         <div className="flex items-center justify-between px-2 py-2">
           <Link
             href="/profile"

@@ -118,29 +118,6 @@ export default function ProfilePage() {
 
 
 
-        {/* Balances */}
-        {Object.keys(balances).length > 0 && (
-          <div className="glass-card p-6">
-            <h3 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: "var(--text-secondary)" }}>
-              <Wallet className="w-4 h-4" style={{ color: "var(--accent-violet)" }} />
-              Поточний баланс
-            </h3>
-            <div className="flex gap-4 flex-wrap">
-              {Object.entries(balances).map(([currency, amount]) => (
-                <div key={currency} className="flex flex-col">
-                  <span className="text-xs mb-0.5" style={{ color: "var(--text-muted)" }}>{currency}</span>
-                  <span
-                    className="text-xl font-bold"
-                    style={{ color: amount >= 0 ? "var(--accent-emerald)" : "var(--accent-rose)" }}
-                  >
-                    {amount >= 0 ? "+" : ""}{amount.toFixed(2)} {getCurrencySymbol(currency)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Families */}
         {families.length > 0 && (
           <div className="glass-card p-6">
