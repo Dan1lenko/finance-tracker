@@ -9,14 +9,14 @@ import { Transaction, TransactionType } from "@prisma/client";
  */
 
 // Визначення явних типів, якщо типів Prisma недостатньо або для розв'язки
-type FinancialTransaction = Pick<Transaction, "amount" | "type" | "category" | "date">;
+type FinancialTransaction = Pick<Transaction, "amount" | "type" | "category" | "date" | "currency">;
 
 /**
  * Розраховує загальний баланс зі списку транзакцій по валютах.
  */
 export const calculateBalance = (transactions: FinancialTransaction[]): Record<string, number> => {
   return transactions.reduce((acc, transaction) => {
-    const currency = (transaction as any).currency || "UAH";
+    const currency = transaction.currency || "UAH";
     const currentBalance = acc[currency] || 0;
     
     const newBalance = transaction.type === "INCOME" 
@@ -35,7 +35,7 @@ export const getExpensesByCategory = (transactions: FinancialTransaction[]): Rec
   return transactions
     .filter((t) => t.type === "EXPENSE")
     .reduce((acc, t) => {
-      const currency = (t as any).currency || "UAH";
+      const currency = t.currency || "UAH";
       const currencyGroup = acc[currency] || {};
       const currentAmount = currencyGroup[t.category] || 0;
       

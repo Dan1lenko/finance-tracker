@@ -5,13 +5,13 @@ import { X, Search, UserPlus, Check } from "lucide-react";
 import { User } from "@prisma/client";
 import { useFinanceStore } from "@/store/useFinanceStore";
 
-interface MemberSearchModalProps {
+interface MemberSearchModalClientProps {
   isOpen: boolean;
   onClose: () => void;
   familyId: string;
 }
 
-export default function MemberSearchModal({ isOpen, onClose, familyId }: MemberSearchModalProps) {
+export default function MemberSearchModalClient({ isOpen, onClose, familyId }: MemberSearchModalClientProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<User[]>([]);
   const [isSearching, setIsSearching] = useState(false);

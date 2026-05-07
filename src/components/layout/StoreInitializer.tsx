@@ -1,7 +1,7 @@
 "use client";
 
 import { useFinanceStore } from "@/store/useFinanceStore";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export default function StoreInitializer() {
   const { _fetchTransactions, _fetchFamilies, currentUser } = useFinanceStore();

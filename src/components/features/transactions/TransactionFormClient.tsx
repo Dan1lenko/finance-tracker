@@ -22,7 +22,7 @@ function generateUUID(): string {
  * 
  * Обробляє введення користувача та відправляє дії (actions) в store.
  */
-export default function TransactionForm() {
+export default function TransactionFormClient() {
   const { addTransaction, activeContext, activeFamilyId, currentUser } = useFinanceStore();
   
   const [amount, setAmount] = useState("");
@@ -35,7 +35,7 @@ export default function TransactionForm() {
     if (!amount || !category) return;
 
     addTransaction({
-      id: generateUUID(), // Optimistic ID generation
+      id: generateUUID(),
       amount: parseFloat(amount),
       currency,
       type,
@@ -48,7 +48,6 @@ export default function TransactionForm() {
       familyId: activeContext === 'FAMILY' ? activeFamilyId : null
     });
 
-    // Reset form
     setAmount("");
     setCategory("");
   };
@@ -96,7 +95,6 @@ export default function TransactionForm() {
           <div className="col-span-2">
              <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Сума</label>
 
-             {/* Custom amount stepper: [↓]  [input]  [↑] */}
              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 
                {/* ↓ minus button */}
