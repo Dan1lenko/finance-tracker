@@ -26,10 +26,7 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
         setIsSearching(true);
         try {
           const res = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
-          if (res.ok) {
-            const data = await res.json();
-            setResults(data);
-          }
+          if (res.ok) setResults(await res.json());
         } catch (error) {
           console.error("Search error", error);
         } finally {
@@ -39,13 +36,10 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
         setResults([]);
       }
     }, 300);
-
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
-  const handleAdd = async (email: string) => {
-    await addMemberToFamily(familyId, email);
-  };
+  const handleAdd = async (email: string) => { await addMemberToFamily(familyId, email); };
 
   if (!isOpen) return null;
 
@@ -53,18 +47,11 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
     <div className="modal-overlay">
       <div className="modal-card">
         {/* Header */}
-        <div
-          className="flex items-center justify-between p-4"
-          style={{ borderBottom: '0.5px solid var(--color-border)' }}
-        >
-          <h3 className="font-semibold text-base" style={{ color: 'var(--color-text)' }}>Додати учасника</h3>
-          <button 
-            onClick={onClose} 
-            className="p-1 rounded-lg transition-colors"
-            style={{ color: 'var(--color-muted)' }}
+        <div className="flex items-center justify-between p-4" style={{ borderBottom: '0.5px solid var(--color-surface-2)' }}>
+          <h3 className="font-medium text-base" style={{ color: 'var(--color-text)' }}>Додати учасника</h3>
+          <button onClick={onClose} className="p-1 rounded-lg transition-colors" style={{ color: 'var(--color-muted)' }}
             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'}
-          >
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -72,22 +59,13 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
         {/* Content */}
         <div className="p-4">
           <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Пошук за ім'ям або email..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="glass-input"
-              style={{ paddingLeft: '2.5rem' }}
-              autoFocus
-            />
+            <input type="text" placeholder="Пошук за ім'ям або email..." value={query}
+              onChange={(e) => setQuery(e.target.value)} className="glass-input" style={{ paddingLeft: '2.5rem' }} autoFocus />
             <Search className="w-4 h-4 absolute left-3.5 top-3" style={{ color: 'var(--color-muted)' }} />
             {isSearching && (
               <div className="absolute right-3 top-3">
-                <div
-                  className="animate-spin h-4 w-4 rounded-full"
-                  style={{ border: '2px solid var(--color-primary)', borderTopColor: 'transparent' }}
-                ></div>
+                <div className="animate-spin h-4 w-4 rounded-full"
+                  style={{ border: '2px solid var(--color-primary)', borderTopColor: 'transparent' }} />
               </div>
             )}
           </div>
@@ -97,18 +75,11 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
               results.map((user) => {
                 const isMember = currentMemberIds.has(user.id);
                 return (
-                  <div
-                    key={user.id}
-                    className="flex items-center justify-between p-3 rounded-xl transition-colors"
-                    style={{ background: 'var(--color-surface)' }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-surface-2)'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'var(--color-surface)'}
-                  >
+                  <div key={user.id} className="flex items-center justify-between p-3 rounded-xl transition-colors"
+                    style={{ background: 'var(--color-surface)' }}>
                     <div className="flex items-center gap-3">
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-                        style={{ background: 'var(--color-surface-2)', color: '#6b5c4e' }}
-                      >
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
+                        style={{ background: 'var(--color-surface-2)', color: '#5a4a3a' }}>
                         {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                       </div>
                       <div className="overflow-hidden">
@@ -116,20 +87,14 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
                         <p className="text-xs truncate max-w-[150px]" style={{ color: 'var(--color-muted)' }}>{user.email}</p>
                       </div>
                     </div>
-                    
                     {isMember ? (
-                      <span className="badge badge-emerald">
-                        <Check className="w-3 h-3" /> В групі
-                      </span>
+                      <span className="badge badge-emerald"><Check className="w-3 h-3" /> В групі</span>
                     ) : (
-                      <button
-                        onClick={() => handleAdd(user.email)}
-                        className="p-2 rounded-lg transition-all"
+                      <button onClick={() => handleAdd(user.email)} className="p-2 rounded-lg transition-all"
                         style={{ background: 'var(--color-primary-bg)', color: 'var(--color-primary)' }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-primary)'; e.currentTarget.style.color = 'white'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-primary-bg)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
-                        title="Додати"
-                      >
+                        title="Додати">
                         <UserPlus className="w-4 h-4" />
                       </button>
                     )}

@@ -11,72 +11,34 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-/**
- * Компонент Sidebar (Декларативний підхід)
- * 
- * Відповідає за навігацію та перемикання контексту (Особистий / Сімейний).
- */
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { 
-    currentUser, 
-    families, 
-    activeContext, 
-    activeFamilyId, 
-    createFamily,
-    logout,
-    setActiveContext
-  } = useFinanceStore();
-
+  const { currentUser, families, activeContext, activeFamilyId, createFamily, logout, setActiveContext } = useFinanceStore();
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
   const [newFamilyName, setNewFamilyName] = useState("");
 
   const handleCreateFamily = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newFamilyName.trim()) {
-      createFamily(newFamilyName);
-      setNewFamilyName("");
-      setIsCreating(false);
-    }
+    if (newFamilyName.trim()) { createFamily(newFamilyName); setNewFamilyName(""); setIsCreating(false); }
   };
-
-  const handleLogout = () => {
-    logout();
-    router.push("/auth/login");
-  };
-
-  const handleContextSwitch = (context: 'PERSONAL' | 'FAMILY', familyId?: string) => {
-    setActiveContext(context, familyId);
-    onClose?.();
-  };
+  const handleLogout = () => { logout(); router.push("/auth/login"); };
+  const handleContextSwitch = (context: 'PERSONAL' | 'FAMILY', familyId?: string) => { setActiveContext(context, familyId); onClose?.(); };
 
   const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
-  if (!mounted) {
-     return <aside className={`w-64 sidebar ${isOpen ? 'open' : ''}`}></aside>;
-  }
+  if (!mounted) return <aside className={`w-64 sidebar ${isOpen ? 'open' : ''}`}></aside>;
 
   if (!currentUser) {
     return (
       <aside className={`w-64 sidebar flex items-center justify-center p-6 ${isOpen ? 'open' : ''}`}>
         <div className="text-center">
-          <div
-            className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
-            style={{ background: 'var(--color-primary)' }}
-          >
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ background: 'var(--color-primary)' }}>
             <LayoutDashboard className="w-8 h-8 text-white" />
           </div>
           <p className="mb-4 text-sm" style={{ color: 'var(--color-muted)' }}>Ви не увійшли в систему</p>
-          <Link 
-            href="/auth/login"
-            className="gradient-btn flex items-center gap-2 px-5 py-2.5 text-sm justify-center"
-            onClick={() => onClose?.()}
-          >
-            <LogIn className="w-4 h-4" />
-            Увійти
+          <Link href="/auth/login" className="gradient-btn flex items-center gap-2 px-5 py-2.5 text-sm justify-center" onClick={() => onClose?.()}>
+            <LogIn className="w-4 h-4" /> Увійти
           </Link>
         </div>
       </aside>
@@ -86,22 +48,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside className={`w-64 sidebar ${isOpen ? 'open' : ''}`}>
       {/* Brand */}
-      <div className="p-5 flex items-center justify-between" style={{ borderBottom: '0.5px solid var(--color-border)' }}>
+      <div className="p-5 flex items-center justify-between" style={{ borderBottom: '0.5px solid var(--color-surface-2)' }}>
         <h2 className="text-lg font-bold flex items-center gap-2.5">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: 'var(--color-primary)' }}
-          >
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-primary)' }}>
             <LayoutDashboard className="w-4 h-4 text-white" />
           </div>
           <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>FinanceApp</span>
         </h2>
-        {/* Close button for mobile */}
-        <button 
-          onClick={onClose} 
-          className="md:hidden p-1 rounded-lg transition-colors"
-          style={{ color: 'var(--color-muted)' }}
-        >
+        <button onClick={onClose} className="md:hidden p-1 rounded-lg transition-colors" style={{ color: 'var(--color-muted)' }}>
           <X className="w-5 h-5" />
         </button>
       </div>
@@ -109,61 +63,32 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Navigation */}
       <div className="p-4 flex-1 overflow-y-auto">
         <div className="space-y-1">
-          <p className="px-3 text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--color-muted)' }}>
-            Навігація
-          </p>
-          <Link
-            href="/profile"
-            onClick={() => onClose?.()}
-            className="sidebar-item"
-          >
-            <User className="w-4 h-4" />
-            Мій профіль
+          <p className="px-3 text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--color-muted)' }}>Навігація</p>
+          <Link href="/profile" onClick={() => onClose?.()} className="sidebar-item">
+            <User className="w-4 h-4" /> Мій профіль
           </Link>
-          <button
-            onClick={() => handleContextSwitch('PERSONAL')}
-            className={`sidebar-item ${activeContext === 'PERSONAL' ? 'sidebar-item-active' : ''}`}
-          >
-            <Wallet className="w-4 h-4" />
-            Мій гаманець
+          <button onClick={() => handleContextSwitch('PERSONAL')} className={`sidebar-item ${activeContext === 'PERSONAL' ? 'sidebar-item-active' : ''}`}>
+            <Wallet className="w-4 h-4" /> Мій гаманець
           </button>
         </div>
 
-
         <div className="mt-8 space-y-1">
           <div className="flex items-center justify-between px-3 mb-2">
-            <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: 'var(--color-muted)' }}>
-              Сімейні групи
-            </p>
-            <button 
-              onClick={() => setIsCreating(true)}
-              className="transition-colors rounded-md p-0.5"
-              style={{ color: 'var(--color-muted)' }}
+            <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: 'var(--color-muted)' }}>Сімейні групи</p>
+            <button onClick={() => setIsCreating(true)} className="transition-colors rounded-md p-0.5" style={{ color: 'var(--color-muted)' }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'}
-              title="Створити групу"
-            >
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'} title="Створити групу">
               <Plus className="w-4 h-4" />
             </button>
           </div>
-
           {families.length === 0 ? (
-            <div className="px-3 py-2 text-sm italic" style={{ color: 'var(--color-muted)' }}>
-              Груп немає
-            </div>
+            <div className="px-3 py-2 text-sm italic" style={{ color: 'var(--color-muted)' }}>Груп немає</div>
           ) : (
             families.map((family) => (
               <div key={family.id} className="relative group">
-                <button
-                  onClick={() => handleContextSwitch('FAMILY', family.id)}
-                  className={`sidebar-item ${
-                    activeContext === 'FAMILY' && activeFamilyId === family.id
-                      ? 'sidebar-item-active'
-                      : ''
-                  }`}
-                >
-                  <Users className="w-4 h-4" />
-                  {family.name}
+                <button onClick={() => handleContextSwitch('FAMILY', family.id)}
+                  className={`sidebar-item ${activeContext === 'FAMILY' && activeFamilyId === family.id ? 'sidebar-item-active' : ''}`}>
+                  <Users className="w-4 h-4" /> {family.name}
                 </button>
               </div>
             ))
@@ -171,32 +96,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {isCreating && (
-          <div
-            className="mt-4 p-3 rounded-xl"
-            style={{ background: 'var(--color-surface)', border: '0.5px solid var(--color-border)' }}
-          >
+          <div className="mt-4 p-3 rounded-xl" style={{ background: 'var(--color-surface)', border: '0.5px solid var(--color-surface-2)' }}>
             <form onSubmit={handleCreateFamily}>
-              <input
-                type="text"
-                autoFocus
-                placeholder="Назва групи..."
-                value={newFamilyName}
-                onChange={(e) => setNewFamilyName(e.target.value)}
-                className="glass-input text-sm mb-2"
-              />
+              <input type="text" autoFocus placeholder="Назва групи..." value={newFamilyName}
+                onChange={(e) => setNewFamilyName(e.target.value)} className="glass-input text-sm mb-2" />
               <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="gradient-btn flex-1 text-xs py-1.5"
-                >
-                  Створити
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsCreating(false)}
-                  className="flex-1 text-xs py-1.5 rounded-lg transition-colors"
-                  style={{ background: 'var(--color-surface-2)', color: 'var(--color-muted)', border: '0.5px solid var(--color-border)' }}
-                >
+                <button type="submit" className="gradient-btn flex-1 text-xs py-1.5">Створити</button>
+                <button type="button" onClick={() => setIsCreating(false)} className="flex-1 text-xs py-1.5 rounded-lg transition-colors"
+                  style={{ background: 'var(--color-bg)', color: 'var(--color-muted)', border: '0.5px solid var(--color-surface-2)' }}>
                   Скасувати
                 </button>
               </div>
@@ -206,18 +113,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       </div>
 
       {/* User section */}
-      <div className="p-4" style={{ borderTop: '0.5px solid var(--color-border)', paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
+      <div className="p-4" style={{ borderTop: '0.5px solid var(--color-surface-2)', paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         <div className="flex items-center justify-between px-2 py-2">
-          <Link
-            href="/profile"
-            onClick={() => onClose?.()}
-            className="flex items-center gap-3 flex-1 min-w-0 rounded-xl transition-all"
-            style={{ color: 'inherit' }}
-          >
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0"
-              style={{ background: 'var(--color-surface-2)', color: '#6b5c4e' }}
-            >
+          <Link href="/profile" onClick={() => onClose?.()} className="flex items-center gap-3 flex-1 min-w-0 rounded-xl transition-all" style={{ color: 'inherit' }}>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0"
+              style={{ background: 'var(--color-surface-2)', color: '#5a4a3a' }}>
               {currentUser.name?.[0] || currentUser.email[0].toUpperCase()}
             </div>
             <div className="overflow-hidden">
@@ -225,14 +125,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <p className="text-[10px] truncate" style={{ color: 'var(--color-muted)' }}>Профіль →</p>
             </div>
           </Link>
-          <button 
-            onClick={handleLogout}
-            className="transition-colors p-1.5 rounded-lg flex-shrink-0 ml-1"
-            style={{ color: 'var(--color-muted)' }}
+          <button onClick={handleLogout} className="transition-colors p-1.5 rounded-lg flex-shrink-0 ml-1" style={{ color: 'var(--color-muted)' }}
             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-expense)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'}
-            title="Вийти"
-          >
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'} title="Вийти">
             <LogOut className="w-5 h-5" />
           </button>
         </div>
