@@ -53,14 +53,17 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
     <div className="modal-overlay">
       <div className="modal-card">
         {/* Header */}
-        <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid var(--border-glass)' }}>
-          <h3 className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>Додати учасника</h3>
+        <div
+          className="flex items-center justify-between p-4"
+          style={{ borderBottom: '0.5px solid var(--color-border)' }}
+        >
+          <h3 className="font-semibold text-base" style={{ color: 'var(--color-text)' }}>Додати учасника</h3>
           <button 
             onClick={onClose} 
             className="p-1 rounded-lg transition-colors"
-            style={{ color: 'var(--text-muted)' }}
-            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+            style={{ color: 'var(--color-muted)' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'}
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,10 +81,13 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
               style={{ paddingLeft: '2.5rem' }}
               autoFocus
             />
-            <Search className="w-4 h-4 absolute left-3.5 top-3" style={{ color: 'var(--text-muted)' }} />
+            <Search className="w-4 h-4 absolute left-3.5 top-3" style={{ color: 'var(--color-muted)' }} />
             {isSearching && (
               <div className="absolute right-3 top-3">
-                <div className="animate-spin h-4 w-4 rounded-full" style={{ border: '2px solid var(--accent-violet)', borderTopColor: 'transparent' }}></div>
+                <div
+                  className="animate-spin h-4 w-4 rounded-full"
+                  style={{ border: '2px solid var(--color-primary)', borderTopColor: 'transparent' }}
+                ></div>
               </div>
             )}
           </div>
@@ -91,18 +97,23 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
               results.map((user) => {
                 const isMember = currentMemberIds.has(user.id);
                 return (
-                  <div key={user.id} className="flex items-center justify-between p-3 rounded-xl transition-colors"
-                       style={{ background: 'rgba(255,255,255,0.03)' }}
-                       onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
-                       onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+                  <div
+                    key={user.id}
+                    className="flex items-center justify-between p-3 rounded-xl transition-colors"
+                    style={{ background: 'var(--color-surface)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-surface-2)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'var(--color-surface)'}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold" style={{ background: 'rgba(139,92,246,0.15)', color: '#c4b5fd' }}>
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
+                        style={{ background: 'var(--color-surface-2)', color: '#6b5c4e' }}
+                      >
                         {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                       </div>
                       <div className="overflow-hidden">
-                        <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{user.name || "Без імені"}</p>
-                        <p className="text-xs truncate max-w-[150px]" style={{ color: 'var(--text-muted)' }}>{user.email}</p>
+                        <p className="text-sm font-medium truncate" style={{ color: 'var(--color-text)' }}>{user.name || "Без імені"}</p>
+                        <p className="text-xs truncate max-w-[150px]" style={{ color: 'var(--color-muted)' }}>{user.email}</p>
                       </div>
                     </div>
                     
@@ -114,9 +125,9 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
                       <button
                         onClick={() => handleAdd(user.email)}
                         className="p-2 rounded-lg transition-all"
-                        style={{ background: 'rgba(139,92,246,0.1)', color: 'var(--accent-violet)' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-violet)'; e.currentTarget.style.color = 'white'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(139,92,246,0.1)'; e.currentTarget.style.color = 'var(--accent-violet)'; }}
+                        style={{ background: 'var(--color-primary-bg)', color: 'var(--color-primary)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-primary)'; e.currentTarget.style.color = 'white'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-primary-bg)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
                         title="Додати"
                       >
                         <UserPlus className="w-4 h-4" />
@@ -126,9 +137,9 @@ export default function MemberSearchModalClient({ isOpen, onClose, familyId }: M
                 );
               })
             ) : query && !isSearching ? (
-              <p className="text-center text-sm py-4" style={{ color: 'var(--text-muted)' }}>Нікого не знайдено</p>
+              <p className="text-center text-sm py-4" style={{ color: 'var(--color-muted)' }}>Нікого не знайдено</p>
             ) : (
-              <p className="text-center text-xs py-4" style={{ color: 'var(--text-muted)' }}>Введіть email для пошуку</p>
+              <p className="text-center text-xs py-4" style={{ color: 'var(--color-muted)' }}>Введіть email для пошуку</p>
             )}
           </div>
         </div>

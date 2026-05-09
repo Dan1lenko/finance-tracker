@@ -48,23 +48,32 @@ export default function LoginFormClient() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--bg-primary)' }}>
-      {/* Background decoration */}
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--color-bg)' }}>
+      {/* Subtle warm background blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full opacity-20" style={{ background: 'var(--accent-violet)', filter: 'blur(120px)' }} />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full opacity-15" style={{ background: 'var(--accent-cyan)', filter: 'blur(120px)' }} />
+        <div
+          className="absolute top-1/4 -left-32 w-96 h-96 rounded-full opacity-40"
+          style={{ background: 'var(--color-surface-2)', filter: 'blur(100px)' }}
+        />
+        <div
+          className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full opacity-30"
+          style={{ background: 'var(--color-income-bg)', filter: 'blur(100px)' }}
+        />
       </div>
 
       <div className="relative w-full max-w-md animate-fade-in-up">
         <div className="glass-card p-6 sm:p-8">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ background: 'var(--gradient-brand)' }}>
+            <div
+              className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
+              style={{ background: 'var(--color-primary)' }}
+            >
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold gradient-text">Вхід в систему</h2>
-            <p className="mt-2 text-sm" style={{ color: 'var(--text-muted)' }}>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>Вхід в систему</h2>
+            <p className="mt-2 text-sm" style={{ color: 'var(--color-muted)' }}>
               Або{' '}
-              <Link href="/auth/register" className="font-medium transition-colors" style={{ color: 'var(--accent-violet)' }}>
+              <Link href="/auth/register" className="font-medium transition-colors" style={{ color: 'var(--color-primary)' }}>
                 зареєструйтеся
               </Link>
             </p>
@@ -73,7 +82,7 @@ export default function LoginFormClient() {
           <form className="space-y-4" onSubmit={handleLogin} noValidate>
             <div>
               <div className="relative">
-                <Mail className="absolute top-3 left-3.5 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+                <Mail className="absolute top-3 left-3.5 w-4 h-4" style={{ color: 'var(--color-muted)' }} />
                 <input
                   type="email"
                   className={`glass-input ${errors.email ? 'input-error' : ''}`}
@@ -89,7 +98,7 @@ export default function LoginFormClient() {
 
             <div>
               <div className="relative">
-                <KeyRound className="absolute top-3 left-3.5 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+                <KeyRound className="absolute top-3 left-3.5 w-4 h-4" style={{ color: 'var(--color-muted)' }} />
                 <input
                   type="password"
                   className={`glass-input ${errors.password ? 'input-error' : ''}`}

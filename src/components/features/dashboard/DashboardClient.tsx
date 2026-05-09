@@ -59,7 +59,7 @@ export default function DashboardClient() {
   const [renameValue, setRenameValue] = useState("");
 
   useEffect(() => { setMounted(true); }, []);
-  if (!mounted) return <div className="p-6" style={{ color: 'var(--text-muted)' }}>Завантаження...</div>;
+  if (!mounted) return <div className="p-6" style={{ color: 'var(--color-muted)' }}>Завантаження...</div>;
 
   // ─── Handlers ──────────────────────────────────────────────────────────
 
@@ -104,10 +104,10 @@ export default function DashboardClient() {
       {/* Header Context */}
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+          <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
             {activeContext === 'PERSONAL' ? 'Мій гаманець' : currentFamily?.name || 'Сімейна група'}
           </h2>
-          <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm mt-0.5" style={{ color: 'var(--color-muted)' }}>
             {activeContext === 'PERSONAL'
               ? 'Ваш особистий фінансовий огляд'
               : `Спільний бюджет для ${currentFamily?.name}`}
@@ -119,14 +119,14 @@ export default function DashboardClient() {
       {activeContext === 'FAMILY' && currentFamily && (
         <div className="glass-card p-4 mb-2">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Учасники групи</h4>
+            <h4 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Учасники групи</h4>
             {currentUser?.id === currentFamily.ownerId && (
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg transition-all"
-                style={{ color: 'var(--accent-violet)', background: 'rgba(139,92,246,0.1)' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(139,92,246,0.2)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(139,92,246,0.1)')}
+                style={{ color: 'var(--color-primary)', background: 'var(--color-primary-bg)' }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#d0d9fb')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-primary-bg)')}
               >
                 <Plus className="w-3.5 h-3.5" />
                 Додати учасника
@@ -139,11 +139,18 @@ export default function DashboardClient() {
               <div
                 key={member.id}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${member.id === currentUser?.id ? 'badge-violet' : ''}`}
-                style={member.id !== currentUser?.id ? { background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' } : {}}
+                style={member.id !== currentUser?.id ? {
+                  background: 'var(--color-surface)',
+                  color: 'var(--color-muted)',
+                  border: '0.5px solid var(--color-border)',
+                } : {}}
               >
                 <div
                   className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-                  style={{ background: member.id === currentUser?.id ? 'rgba(139,92,246,0.3)' : 'rgba(255,255,255,0.1)', color: 'var(--text-primary)' }}
+                  style={{
+                    background: member.id === currentUser?.id ? 'var(--color-primary-bg)' : 'var(--color-surface-2)',
+                    color: member.id === currentUser?.id ? 'var(--color-primary)' : '#6b5c4e',
+                  }}
                 >
                   {member.name?.[0] || member.email[0].toUpperCase()}
                 </div>
@@ -153,9 +160,9 @@ export default function DashboardClient() {
                   <button
                     onClick={() => handleRemoveMember(member.id, member.name || member.email)}
                     className="ml-1 transition-colors"
-                    style={{ color: 'var(--text-muted)' }}
-                    onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-rose)'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                    style={{ color: 'var(--color-muted)' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--color-expense)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--color-muted)'}
                   >
                     ×
                   </button>
@@ -165,7 +172,7 @@ export default function DashboardClient() {
           </div>
 
           {currentUser?.id === currentFamily.ownerId && (
-            <div className="mt-4 pt-3 flex flex-col gap-3" style={{ borderTop: '1px solid var(--border-glass)' }}>
+            <div className="mt-4 pt-3 flex flex-col gap-3" style={{ borderTop: '0.5px solid var(--color-border)' }}>
               {/* Inline rename form */}
               {renamingFamilyId === currentFamily.id ? (
                 <form onSubmit={handleSubmitRename} className="flex gap-2">
@@ -183,7 +190,7 @@ export default function DashboardClient() {
                     type="button"
                     onClick={() => setRenamingFamilyId(null)}
                     className="px-3 py-1.5 text-xs rounded-lg flex items-center gap-1"
-                    style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}
+                    style={{ background: 'var(--color-surface-2)', color: 'var(--color-muted)', border: '0.5px solid var(--color-border)' }}
                   >
                     <X className="w-3 h-3" /> Скасувати
                   </button>
@@ -193,18 +200,18 @@ export default function DashboardClient() {
                   <button
                     onClick={handleStartRename}
                     className="text-xs px-3 py-1.5 rounded-lg transition-colors"
-                    style={{ color: 'var(--accent-cyan)', background: 'rgba(6,182,212,0.1)' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(6,182,212,0.2)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(6,182,212,0.1)'}
+                    style={{ color: 'var(--color-income-text)', background: 'var(--color-income-bg)', border: '0.5px solid rgba(46,196,182,0.3)' }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#c3eeeb'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'var(--color-income-bg)'}
                   >
                     Змінити назву
                   </button>
                   <button
                     onClick={handleDeleteFamily}
                     className="text-xs px-3 py-1.5 rounded-lg transition-colors"
-                    style={{ color: 'var(--accent-rose)', background: 'rgba(244,63,94,0.1)' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(244,63,94,0.2)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(244,63,94,0.1)'}
+                    style={{ color: 'var(--color-expense-text)', background: 'var(--color-expense-bg)', border: '0.5px solid rgba(231,111,81,0.3)' }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#f8d8d0'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'var(--color-expense-bg)'}
                   >
                     Видалити групу
                   </button>
@@ -220,35 +227,40 @@ export default function DashboardClient() {
         {currencies.map(currency => (
           <div key={currency} className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Balance card */}
               <div className="stat-card-balance">
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-3">
-                    <Wallet className="w-5 h-5 text-white/80" />
-                    <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Баланс {currency}</span>
+                    <Wallet className="w-5 h-5" style={{ color: 'var(--color-primary)' }} />
+                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+                      Баланс {currency}
+                    </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
                     {(balances[currency] || 0).toFixed(2)} {getCurrencySymbol(currency)}
                   </h3>
                   {(balances[currency] || 0) < 0 && (
-                    <span className="text-[10px] text-white/60 mt-1 inline-block">Негативний баланс</span>
+                    <span className="text-[10px] mt-1 inline-block" style={{ color: 'var(--color-expense)' }}>Негативний баланс</span>
                   )}
                 </div>
               </div>
+              {/* Income card */}
               <div className="stat-card-income">
                 <div className="flex items-center gap-2 mb-3">
-                  <ArrowUpCircle className="w-5 h-5 text-white/80" />
-                  <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Дохід</span>
+                  <ArrowUpCircle className="w-5 h-5" style={{ color: 'var(--color-income)' }} />
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-income-text)' }}>Дохід</span>
                 </div>
-                <h3 className="text-2xl font-bold text-white">
+                <h3 className="text-2xl font-bold" style={{ color: 'var(--color-income-text)' }}>
                   +{(incomeByCurrency[currency] || 0).toFixed(2)} {getCurrencySymbol(currency)}
                 </h3>
               </div>
+              {/* Expense card */}
               <div className="stat-card-expense">
                 <div className="flex items-center gap-2 mb-3">
-                  <ArrowDownCircle className="w-5 h-5 text-white/80" />
-                  <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Витрати</span>
+                  <ArrowDownCircle className="w-5 h-5" style={{ color: 'var(--color-expense)' }} />
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-expense-text)' }}>Витрати</span>
                 </div>
-                <h3 className="text-2xl font-bold text-white">
+                <h3 className="text-2xl font-bold" style={{ color: 'var(--color-expense-text)' }}>
                   -{(expenseByCurrency[currency] || 0).toFixed(2)} {getCurrencySymbol(currency)}
                 </h3>
               </div>
@@ -262,29 +274,29 @@ export default function DashboardClient() {
         {/* Recent Transactions */}
         <div className="glass-card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-base font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <Clock className="w-4 h-4" style={{ color: 'var(--accent-violet)' }} />
+            <h4 className="text-base font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+              <Clock className="w-4 h-4" style={{ color: 'var(--color-primary)' }} />
               Останні транзакції
             </h4>
             <button
               onClick={() => router.push('/transactions')}
               className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg transition-all"
-              style={{ color: 'var(--accent-violet)', background: 'rgba(139,92,246,0.1)' }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(139,92,246,0.2)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(139,92,246,0.1)')}
+              style={{ color: 'var(--color-primary)', background: 'var(--color-primary-bg)' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#d0d9fb')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-primary-bg)')}
             >
               Всі транзакції <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
-          <ul className="space-y-2">
+          <ul className="space-y-0">
             {filteredTransactions.length === 0 ? (
-              <p className="text-sm py-4 text-center" style={{ color: 'var(--text-muted)' }}>Транзакцій ще немає.</p>
+              <p className="text-sm py-4 text-center" style={{ color: 'var(--color-muted)' }}>Транзакцій ще немає.</p>
             ) : (
               filteredTransactions
                 .slice()
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .slice(0, 5)
-                .map(t => {
+                .map((t, idx, arr) => {
                   const transactionFamily = t.familyId ? families.find(f => f.id === t.familyId) : null;
                   const symbol = getCurrencySymbol(t.currency);
                   const member = activeContext === 'FAMILY' && currentFamily
@@ -298,40 +310,55 @@ export default function DashboardClient() {
                     <li
                       key={t.id}
                       className="flex justify-between items-center py-2.5 px-3 rounded-lg transition-colors"
-                      style={{ borderBottom: '1px solid var(--border-glass)' }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+                      style={{ borderBottom: idx < arr.length - 1 ? '0.5px solid #EEE5D8' : 'none' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--color-surface)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
                       <div className="flex items-center gap-3 min-w-0">
+                        {/* Type icon */}
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={{
+                            background: t.type === 'INCOME' ? 'var(--color-income-bg)' : 'var(--color-expense-bg)',
+                          }}
+                        >
+                          {t.type === 'INCOME'
+                            ? <ArrowUpCircle className="w-4 h-4" style={{ color: 'var(--color-income)' }} />
+                            : <ArrowDownCircle className="w-4 h-4" style={{ color: 'var(--color-expense)' }} />
+                          }
+                        </div>
                         {memberInitial && (
                           <div
                             title={memberName ?? ''}
-                            className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
-                            style={{ background: isMe ? 'var(--gradient-brand)' : 'rgba(6,182,212,0.3)' }}
+                            className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold flex-shrink-0"
+                            style={{
+                              background: isMe ? 'var(--color-primary-bg)' : 'var(--color-income-bg)',
+                              color: isMe ? 'var(--color-primary)' : 'var(--color-income-text)',
+                            }}
                           >
                             {memberInitial}
                           </div>
                         )}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{t.category}</p>
+                            <p className="font-medium text-sm" style={{ color: 'var(--color-text)' }}>{t.category}</p>
                             {transactionFamily && activeContext === 'PERSONAL' && (
                               <span className="badge badge-violet">{transactionFamily.name}</span>
                             )}
                           </div>
                           {memberName && (
-                            <p className="text-xs mt-0.5" style={{ color: isMe ? 'var(--accent-violet)' : 'var(--accent-cyan)', opacity: 0.85 }}>
+                            <p className="text-xs mt-0.5" style={{ color: isMe ? 'var(--color-primary)' : 'var(--color-income-text)', opacity: 0.9 }}>
                               {isMe ? 'Ви' : memberName}
                             </p>
                           )}
-                          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                          <p className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>
                             {new Date(t.date).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
                       <span
                         className="font-semibold text-sm flex-shrink-0 ml-3"
-                        style={{ color: t.type === 'INCOME' ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}
+                        style={{ color: t.type === 'INCOME' ? 'var(--color-income-text)' : 'var(--color-expense-text)' }}
                       >
                         {t.type === 'INCOME' ? '+' : '-'}{t.amount.toFixed(2)} {symbol}
                       </span>
@@ -345,16 +372,16 @@ export default function DashboardClient() {
         {/* Expenses by Category */}
         <div className="glass-card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-base font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <PieChart className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
+            <h4 className="text-base font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+              <PieChart className="w-4 h-4" style={{ color: 'var(--color-income)' }} />
               Витрати за категоріями
             </h4>
             <button
               onClick={() => router.push('/categories')}
               className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg transition-all"
-              style={{ color: 'var(--accent-cyan)', background: 'rgba(6,182,212,0.1)' }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(6,182,212,0.2)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(6,182,212,0.1)')}
+              style={{ color: 'var(--color-income-text)', background: 'var(--color-income-bg)', border: '0.5px solid rgba(46,196,182,0.3)' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#c3eeeb')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-income-bg)')}
             >
               Детальніше <ChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -366,18 +393,21 @@ export default function DashboardClient() {
               const symbol = getCurrencySymbol(currency);
               const total = Object.values(cats).reduce((a, b) => a + b, 0);
               return (
-                <div key={currency} className="pb-3" style={{ borderBottom: '1px solid var(--border-glass)' }}>
-                  <p className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--text-muted)' }}>{currency}</p>
+                <div key={currency} className="pb-3" style={{ borderBottom: '0.5px solid #EEE5D8' }}>
+                  <p className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--color-muted)' }}>{currency}</p>
                   {Object.entries(cats).map(([category, amount]) => {
                     const percentage = total > 0 ? (amount / total) * 100 : 0;
                     return (
                       <div key={category} className="mb-3">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm capitalize" style={{ color: 'var(--text-secondary)' }}>{category}</span>
-                          <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{amount.toFixed(2)} {symbol}</span>
+                          <span className="text-sm capitalize" style={{ color: 'var(--color-text)' }}>{category}</span>
+                          <span className="text-sm font-bold" style={{ color: 'var(--color-expense-text)' }}>{amount.toFixed(2)} {symbol}</span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                          <div className="h-full rounded-full transition-all duration-700" style={{ width: `${percentage}%`, background: 'var(--gradient-expense)' }} />
+                        <div className="w-full h-1.5 rounded-full" style={{ background: 'var(--color-surface-2)' }}>
+                          <div
+                            className="h-full rounded-full transition-all duration-700"
+                            style={{ width: `${percentage}%`, background: 'var(--color-expense)' }}
+                          />
                         </div>
                       </div>
                     );
@@ -386,7 +416,7 @@ export default function DashboardClient() {
               );
             })}
             {Object.keys(expensesByCategory).length === 0 && (
-              <p className="text-sm py-4 text-center" style={{ color: 'var(--text-muted)' }}>Даних про витрати немає.</p>
+              <p className="text-sm py-4 text-center" style={{ color: 'var(--color-muted)' }}>Даних про витрати немає.</p>
             )}
           </div>
         </div>

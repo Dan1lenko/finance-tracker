@@ -54,34 +54,36 @@ export default function TransactionFormClient() {
 
   return (
     <div className="glass-card p-6 h-fit">
-      <h3 className="text-base font-semibold mb-5 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-        <PlusCircle className="w-5 h-5" style={{ color: 'var(--accent-violet)' }} />
+      <h3 className="text-base font-semibold mb-5 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+        <PlusCircle className="w-5 h-5" style={{ color: 'var(--color-primary)' }} />
         Додати транзакцію
       </h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Type toggle */}
         <div>
-          <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Тип</label>
+          <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Тип</label>
           <div className="flex gap-2">
+            {/* Income button */}
             <button
               type="button"
               onClick={() => setType("INCOME")}
               className="flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
-              style={type === "INCOME" 
-                ? { background: 'rgba(16,185,129,0.15)', color: '#6ee7b7', border: '1px solid rgba(16,185,129,0.3)' }
-                : { background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', border: '1px solid var(--border-glass)' }
+              style={type === "INCOME"
+                ? { background: 'var(--color-income-bg)', color: 'var(--color-income-text)', border: '0.5px solid var(--color-income)' }
+                : { background: 'var(--color-surface)', color: 'var(--color-muted)', border: '0.5px solid var(--color-border)' }
               }
             >
               <ArrowUpCircle className="w-4 h-4" />
               Дохід
             </button>
+            {/* Expense button */}
             <button
               type="button"
               onClick={() => setType("EXPENSE")}
               className="flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
-              style={type === "EXPENSE" 
-                ? { background: 'rgba(244,63,94,0.15)', color: '#fda4af', border: '1px solid rgba(244,63,94,0.3)' }
-                : { background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', border: '1px solid var(--border-glass)' }
+              style={type === "EXPENSE"
+                ? { background: 'var(--color-expense-bg)', color: 'var(--color-expense-text)', border: '0.5px solid var(--color-expense)' }
+                : { background: 'var(--color-surface)', color: 'var(--color-muted)', border: '0.5px solid var(--color-border)' }
               }
             >
               <ArrowDownCircle className="w-4 h-4" />
@@ -93,7 +95,7 @@ export default function TransactionFormClient() {
         {/* Amount + Currency */}
         <div className="grid grid-cols-3 gap-2">
           <div className="col-span-2">
-             <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Сума</label>
+             <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Сума</label>
 
              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 
@@ -106,20 +108,20 @@ export default function TransactionFormClient() {
                    flexShrink: 0,
                    width: 34, height: 42,
                    borderRadius: 10,
-                   border: '1px solid rgba(244,63,94,0.35)',
-                   background: 'rgba(244,63,94,0.08)',
-                   color: '#fb7185',
+                   border: '0.5px solid rgba(231,111,81,0.4)',
+                   background: 'var(--color-expense-bg)',
+                   color: 'var(--color-expense)',
                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                    cursor: 'pointer',
-                   transition: 'all 0.18s',
+                   transition: 'all 0.15s',
                  }}
                  onMouseEnter={e => {
-                   e.currentTarget.style.background = 'rgba(244,63,94,0.22)';
-                   e.currentTarget.style.borderColor = 'rgba(244,63,94,0.6)';
+                   e.currentTarget.style.background = '#f8d8d0';
+                   e.currentTarget.style.borderColor = 'var(--color-expense)';
                  }}
                  onMouseLeave={e => {
-                   e.currentTarget.style.background = 'rgba(244,63,94,0.08)';
-                   e.currentTarget.style.borderColor = 'rgba(244,63,94,0.35)';
+                   e.currentTarget.style.background = 'var(--color-expense-bg)';
+                   e.currentTarget.style.borderColor = 'rgba(231,111,81,0.4)';
                  }}
                >
                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
@@ -140,10 +142,10 @@ export default function TransactionFormClient() {
                  style={{
                    flex: 1,
                    minWidth: 0,
-                   background: 'rgba(255,255,255,0.05)',
-                   border: '1px solid var(--border-glass)',
+                   background: 'var(--color-bg)',
+                   border: '0.5px solid var(--color-border)',
                    borderRadius: 10,
-                   color: 'var(--text-primary)',
+                   color: 'var(--color-text)',
                    textAlign: 'center',
                    fontSize: '1rem',
                    fontWeight: 700,
@@ -151,11 +153,11 @@ export default function TransactionFormClient() {
                    outline: 'none',
                  } as React.CSSProperties}
                  onFocus={e => {
-                   e.currentTarget.style.borderColor = 'var(--accent-violet)';
-                   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139,92,246,0.15)';
+                   e.currentTarget.style.borderColor = 'var(--color-primary)';
+                   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(67,97,238,0.12)';
                  }}
                  onBlur={e => {
-                   e.currentTarget.style.borderColor = 'var(--border-glass)';
+                   e.currentTarget.style.borderColor = 'var(--color-border)';
                    e.currentTarget.style.boxShadow = 'none';
                  }}
                />
@@ -169,20 +171,20 @@ export default function TransactionFormClient() {
                    flexShrink: 0,
                    width: 34, height: 42,
                    borderRadius: 10,
-                   border: '1px solid rgba(16,185,129,0.35)',
-                   background: 'rgba(16,185,129,0.08)',
-                   color: '#6ee7b7',
+                   border: '0.5px solid rgba(46,196,182,0.4)',
+                   background: 'var(--color-income-bg)',
+                   color: 'var(--color-income)',
                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                    cursor: 'pointer',
-                   transition: 'all 0.18s',
+                   transition: 'all 0.15s',
                  }}
                  onMouseEnter={e => {
-                   e.currentTarget.style.background = 'rgba(16,185,129,0.22)';
-                   e.currentTarget.style.borderColor = 'rgba(16,185,129,0.6)';
+                   e.currentTarget.style.background = '#c3eeeb';
+                   e.currentTarget.style.borderColor = 'var(--color-income)';
                  }}
                  onMouseLeave={e => {
-                   e.currentTarget.style.background = 'rgba(16,185,129,0.08)';
-                   e.currentTarget.style.borderColor = 'rgba(16,185,129,0.35)';
+                   e.currentTarget.style.background = 'var(--color-income-bg)';
+                   e.currentTarget.style.borderColor = 'rgba(46,196,182,0.4)';
                  }}
                >
                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
@@ -195,7 +197,7 @@ export default function TransactionFormClient() {
           </div>
 
           <div>
-             <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Валюта</label>
+             <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Валюта</label>
              <select
                value={currency}
                onChange={(e) => setCurrency(e.target.value)}
@@ -211,7 +213,7 @@ export default function TransactionFormClient() {
 
         {/* Category */}
         <div>
-           <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Категорія</label>
+           <label className="block text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Категорія</label>
            <input
              type="text"
              value={category}

@@ -17,7 +17,7 @@ export default function TransactionsClient() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  if (!mounted) return <div className="p-8" style={{ color: 'var(--text-muted)' }}>Завантаження...</div>;
+  if (!mounted) return <div className="p-8" style={{ color: 'var(--color-muted)' }}>Завантаження...</div>;
 
 
   const filtered = transactions
@@ -37,7 +37,7 @@ export default function TransactionsClient() {
   const totalExpense = filtered.filter(t => t.type === "EXPENSE").reduce((s, t) => s + t.amount, 0);
 
   return (
-    <div className="min-h-screen p-6 md:p-10" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-screen p-6 md:p-10" style={{ background: 'var(--color-bg)' }}>
       <div className="max-w-3xl mx-auto space-y-6">
 
         {/* Header */}
@@ -45,18 +45,18 @@ export default function TransactionsClient() {
           <button
             onClick={() => router.back()}
             className="flex items-center justify-center w-9 h-9 rounded-xl transition-all"
-            style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)' }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+            style={{ background: 'var(--color-surface)', color: 'var(--color-muted)', border: '0.5px solid var(--color-border)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-surface-2)'; e.currentTarget.style.color = 'var(--color-text)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-surface)'; e.currentTarget.style.color = 'var(--color-muted)'; }}
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <Clock className="w-6 h-6" style={{ color: 'var(--accent-violet)' }} />
+            <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+              <Clock className="w-6 h-6" style={{ color: 'var(--color-primary)' }} />
               Всі транзакції
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--color-muted)' }}>
               {filtered.length} записів
             </p>
           </div>
@@ -64,21 +64,21 @@ export default function TransactionsClient() {
 
         {/* Summary cards */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="glass-card p-4">
+          <div className="stat-card-income p-4">
             <div className="flex items-center gap-2 mb-1">
-              <ArrowUpCircle className="w-4 h-4" style={{ color: 'var(--accent-emerald)' }} />
-              <span className="text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>Доходи</span>
+              <ArrowUpCircle className="w-4 h-4" style={{ color: 'var(--color-income)' }} />
+              <span className="text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--color-income-text)' }}>Доходи</span>
             </div>
-            <p className="text-xl font-bold" style={{ color: 'var(--accent-emerald)' }}>
+            <p className="text-xl font-bold" style={{ color: 'var(--color-income-text)' }}>
               +{totalIncome.toFixed(2)} ₴
             </p>
           </div>
-          <div className="glass-card p-4">
+          <div className="stat-card-expense p-4">
             <div className="flex items-center gap-2 mb-1">
-              <ArrowDownCircle className="w-4 h-4" style={{ color: 'var(--accent-rose)' }} />
-              <span className="text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>Витрати</span>
+              <ArrowDownCircle className="w-4 h-4" style={{ color: 'var(--color-expense)' }} />
+              <span className="text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--color-expense-text)' }}>Витрати</span>
             </div>
-            <p className="text-xl font-bold" style={{ color: 'var(--accent-rose)' }}>
+            <p className="text-xl font-bold" style={{ color: 'var(--color-expense-text)' }}>
               -{totalExpense.toFixed(2)} ₴
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function TransactionsClient() {
         {/* Filters */}
         <div className="glass-card p-4 flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--color-muted)' }} />
             <input
               type="text"
               placeholder="Пошук за категорією..."
@@ -102,9 +102,14 @@ export default function TransactionsClient() {
                 key={f}
                 onClick={() => setTypeFilter(f)}
                 className="px-3 py-2 rounded-xl text-xs font-medium transition-all"
-                style={typeFilter === f
-                  ? { background: 'rgba(139,92,246,0.2)', color: 'var(--accent-violet)', border: '1px solid rgba(139,92,246,0.4)' }
-                  : { background: 'rgba(255,255,255,0.04)', color: 'var(--text-muted)', border: '1px solid var(--border-glass)' }
+                style={
+                  f === "ALL" && typeFilter === f
+                    ? { background: 'var(--color-primary-bg)', color: 'var(--color-primary)', border: '0.5px solid var(--color-primary)' }
+                    : f === "INCOME" && typeFilter === f
+                    ? { background: 'var(--color-income-bg)', color: 'var(--color-income-text)', border: '0.5px solid var(--color-income)' }
+                    : f === "EXPENSE" && typeFilter === f
+                    ? { background: 'var(--color-expense-bg)', color: 'var(--color-expense-text)', border: '0.5px solid var(--color-expense)' }
+                    : { background: 'var(--color-surface)', color: 'var(--color-muted)', border: '0.5px solid var(--color-border)' }
                 }
               >
                 {f === "ALL" ? "Всі" : f === "INCOME" ? "Доходи" : "Витрати"}
@@ -117,8 +122,8 @@ export default function TransactionsClient() {
         <div className="glass-card overflow-hidden">
           {filtered.length === 0 ? (
             <div className="py-16 text-center">
-              <Filter className="w-10 h-10 mx-auto mb-3 opacity-20" style={{ color: 'var(--text-muted)' }} />
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Транзакцій не знайдено</p>
+              <Filter className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--color-border)' }} />
+              <p className="text-sm" style={{ color: 'var(--color-muted)' }}>Транзакцій не знайдено</p>
             </div>
           ) : (
             <ul>
@@ -142,27 +147,30 @@ export default function TransactionsClient() {
                   <li
                     key={t.id}
                     className="flex items-center justify-between px-5 py-4 transition-colors group"
-                    style={{ borderBottom: idx < filtered.length - 1 ? '1px solid var(--border-glass)' : 'none' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.025)'}
+                    style={{ borderBottom: idx < filtered.length - 1 ? '0.5px solid #EEE5D8' : 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--color-surface)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
                     {/* Left: icon + info */}
                     <div className="flex items-center gap-4 min-w-0">
                       <div
                         className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: t.type === 'INCOME' ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)' }}
+                        style={{ background: t.type === 'INCOME' ? 'var(--color-income-bg)' : 'var(--color-expense-bg)' }}
                       >
                         {t.type === 'INCOME'
-                          ? <ArrowUpCircle className="w-4 h-4" style={{ color: 'var(--accent-emerald)' }} />
-                          : <ArrowDownCircle className="w-4 h-4" style={{ color: 'var(--accent-rose)' }} />
+                          ? <ArrowUpCircle className="w-4 h-4" style={{ color: 'var(--color-income)' }} />
+                          : <ArrowDownCircle className="w-4 h-4" style={{ color: 'var(--color-expense)' }} />
                         }
                       </div>
 
                       {memberInitial && (
                         <div
                           title={memberName ?? ''}
-                          className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                          style={{ background: isMe ? 'var(--gradient-brand)' : 'rgba(6,182,212,0.3)' }}
+                          className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0"
+                          style={{
+                            background: isMe ? 'var(--color-primary-bg)' : 'var(--color-surface-2)',
+                            color: isMe ? 'var(--color-primary)' : '#6b5c4e',
+                          }}
                         >
                           {memberInitial}
                         </div>
@@ -170,20 +178,20 @@ export default function TransactionsClient() {
 
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{t.category}</p>
+                          <p className="font-medium text-sm" style={{ color: 'var(--color-text)' }}>{t.category}</p>
                           {transactionFamily && activeContext === 'PERSONAL' && (
                             <span className="badge badge-violet">{transactionFamily.name}</span>
                           )}
                         </div>
                         {memberName && (
-                          <p className="text-xs mt-0.5 font-medium" style={{ color: isMe ? 'var(--accent-violet)' : 'var(--accent-cyan)' }}>
+                          <p className="text-xs mt-0.5 font-medium" style={{ color: isMe ? 'var(--color-primary)' : 'var(--color-income-text)' }}>
                             {isMe ? 'Ви' : memberName}
                           </p>
                         )}
                         {t.description && (
-                          <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>{t.description}</p>
+                          <p className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>{t.description}</p>
                         )}
-                        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>
                           {new Date(t.date).toLocaleDateString('uk-UA', { day: '2-digit', month: 'long', year: 'numeric' })}
                         </p>
                       </div>
@@ -193,7 +201,7 @@ export default function TransactionsClient() {
                     <div className="flex items-center gap-3 flex-shrink-0 ml-3">
                       <span
                         className="font-bold text-base"
-                        style={{ color: t.type === 'INCOME' ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}
+                        style={{ color: t.type === 'INCOME' ? 'var(--color-income-text)' : 'var(--color-expense-text)' }}
                       >
                         {t.type === 'INCOME' ? '+' : '-'}{t.amount.toFixed(2)} {symbol}
                       </span>
@@ -206,9 +214,9 @@ export default function TransactionsClient() {
                           });
                         }}
                         className="opacity-100 md:opacity-0 md:group-hover:opacity-100 w-7 h-7 rounded-lg flex items-center justify-center transition-all"
-                        style={{ color: 'var(--accent-rose)', background: 'rgba(244,63,94,0.1)' }}
-                        onMouseEnter={e => e.currentTarget.style.background = 'rgba(244,63,94,0.22)'}
-                        onMouseLeave={e => e.currentTarget.style.background = 'rgba(244,63,94,0.1)'}
+                        style={{ color: 'var(--color-expense)', background: 'var(--color-expense-bg)' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#f8d8d0'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'var(--color-expense-bg)'}
                         title="Видалити"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
